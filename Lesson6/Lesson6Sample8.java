@@ -8,7 +8,7 @@ public class Lesson6Sample8 {
         boolean bl = false;
         for (int i = 0; i < 5; i ++) {
             for (int j = 0; j < 9; j ++) {
-                if (bl == false) {
+                if (!bl) {
                     System.out.print("=");
                     bl = true;
                 }
