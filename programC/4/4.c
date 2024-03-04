@@ -1,3 +1,11 @@
+/**
+ * @file 4.c
+ * @brief	‚Q‚O‚O‚X”N“x‚Æ‚Q‚O‚P‚O”N“x‚Ì”äŠr‚ğs‚Á‚½Œ‹‰Ê‚ğo—Í‚·‚éƒvƒƒOƒ‰ƒ€‚ğì¬‚¹‚æB
+ * @author Lee Hyeongbeen
+ * @date 2024/2/29
+*/
+
+
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
@@ -6,672 +14,135 @@
 #include <wctype.h>
 #include <ctype.h>
 
-/**
- * @file 2-4.c
- * @brief	 2-3‚©‚ç‚PŒ–ˆ‚Éƒƒ‚ƒŠ‚ÌŠm•Û‚µAƒf[ƒ^‚Ì’Ç‰ÁAíœA•ÏX‚ğ‚·‚éB
- * 		‚»‚µ‚Äƒƒjƒ…[‚É‚Ä‘€ì‚ª‚Å‚«‚éƒvƒƒOƒ‰ƒ€
- * @author Lee Hyeongbeen
- * @date 2024/1/27
-*/
-#define NAME_SIZE 21		/* –¼‘O‚ÌÅ‘å•¶š”i‘SŠp‚È‚Ì‚Å*2j*/
-#define ADD_SIZE 129		/* ZŠ‚ÌÅ‘å•¶š”i‘SŠp‚È‚Ì‚Å*2j*/
-#define BIRTH_SIZE 11		/* ¶”NŒ“ú‚ÌÅ‘å•¶š” */
-#define TEL_SIZE 17		/* “d˜b”Ô†‚ÌÅ‘å•¶š” */
-#define SIZE 5				/*‰ïˆõIDŒ…‚Ì§ŒÀ*/
+#define NAME_SIZE 10		/* –¼‘O‚Ì’·‚³§ŒÀ */
+#define SIZE2009 6			/* 2009”N“x‚Ì”„ã” */
+#define SIZE2010 5			/* 2010”N“x‚Ì”„ã” */
 
-/**
- * \‘¢‘Ì
- * @param (*id)		‰ïˆõID”Ô†
- * @param (*name)		–¼‘O‚Ì”z—ñ
- * @param (*address) 	ZŠ‚Ì”z—ñ
- * @param (*birth) 	¶”NŒ“ú‚Ì”z—ñ
- * @param (*tel) 		“d˜b”Ô†‚Ì”z—ñ
- * @param (*pre) 		‘O‚Ì‰ïˆõî•ñ
- * @param (*next) 	Ÿ‚Ì‰ïˆõî•ñ 
-*/
+/* ŠÖ”éŒ¾ */
+int nameAsc(const void* first, const void* second);
+
+
+/* ”„ã‚ÌŒ */
 typedef struct Member {
 	
-	int id;
-    	char name[NAME_SIZE];
-    	char address[ADD_SIZE];
-    	char birth[BIRTH_SIZE];
-   	 char tel[TEL_SIZE];
-	struct Member *pre;
-	struct Member *next;
-
+	char name[NAME_SIZE];
+	int score;
+	
 } member;
 
-
-/*ŠÖ”éŒ¾*/
-void toEmpty(char *input);
-int fwidthCheck(char *input,int *j);
-int numberCheck(char *input,int *j);
-int sizeCheck(long *i,int *j);
-member *inputs(int *t, member **pre_member, member **next_member,int caseNum);
-void deleteMember(member **pre_member, member **next_member);
-member * updateMember(member **pre_member);
-void findAll(member **pre_member);
-void findMemberById(member **pre_member);
-
-
-/*ƒƒCƒ“*/
-void main() {
-    
-	int caseNum;
-	char choice[SIZE]= {0};
-	int t=0;
-	int end=0;
-	member *pre_member;
-	member *next_member;
-	member *new_member;
-	member *person;
-		
-	setlocale(LC_ALL, "Japanese");	
+/* ”äŠrŒ‹‰Ê‚ÌŒ */
+typedef struct Merge {
 	
-	pre_member = (member *)malloc(sizeof(member));
-	next_member = (member *)malloc(sizeof(member));	
-	memset(pre_member, '\0', sizeof(member)+1);
-	memset(next_member, '\0',sizeof(member)+1);	
+	char name[NAME_SIZE];
+	char score[NAME_SIZE];
+	
+} merge;
 
-		
-	while(1){
-		
-		printf("\n--------------------MAIN MENU-----------------------\n");
-		printf("| 1.“o˜^                                           |\n");
-		printf("| 2.íœ                                           |\n");
-		printf("| 3.•ÏX                                           |\n");
-		printf("| 4.ˆê——ŒŸõ                                       |\n");
-		printf("| 5.ˆêŒŒŸõ                                       |\n");
-		printf("| 6.I—¹                                           |\n");
-		printf("----------------------------------------------------\n");
-		
-		printf("”Ô†‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢\n>>");
-		
-		choice[0]=getchar();
-		
-		if(choice[0]=='\n'){
-			printf("\n–¢“ü—Í‚Å‚·B“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢B\n\n");
-			continue;
+
+/* ƒƒCƒ“ */
+void main (){
+	
+	int i = 0;
+	int j = 0;
+	int noName = 0;		/* –¼‘O‚ª‚È‚©‚Á‚½ê‡‚Ì“Y‚¦” */
+	int mergeLen = 0;	/* merge‚ÌÀÛ”z—ñ” */
+	
+	merge merges[SIZE2009 + SIZE2010];
+	
+	member mem2009[SIZE2009] = { {"¶½¶Ş", 325}, {"ÔÏ¼À", 277}, {"ÀÅ¶", 333}, {"Ö¼µ¶", 192}, {"À¹ÓÄ", 412}, {"±Ä³", 270}};
+	member mem2010[SIZE2010] = { {"½½Ş·", 210}, {"ÔÏ¼À", 233}, {"À¹ÓÄ", 445}, {"Ö¼ÀŞ", 145}, {"¶½¶Ş", 357} };
+	
+	
+	/* if (mem2009[i].name[0] == '\0') { 
+        continue; 
+    }*/		
+	
+	
+	while (i < SIZE2009) {								/* 2009”z—ñ‚Ì‚ ‚é•ªA1dƒ‹[ƒv */
+	    if ( strcmp( mem2009[i].name, mem2010[j].name) == 0) {		/* –¼‘O‚ªˆê’v‚µ‚½ê‡ */
+	        strcpy( merges[mergeLen].name, mem2009[i].name);		/* –¼‘O‚ğmerges‚É•Û‘¶ */
+	        sprintf (merges[mergeLen].score, "%d", mem2010[j].score - mem2009[i].score);	/* ”„ã‚ğmerges‚É•Û‘¶ */
+	        mergeLen++;												/* mergeLen‘‰Á 		*/
+	        j = noName = 0;											/* j‚ÆnoName‚Ì‰Šú‰»	*/
+			i++;													/* 2009‚ÌŸ‚Éi‚Ş */
+	    
+		} else {													/* •sˆê’v‚µ‚½ê‡ */
+	        noName++;												/* noName‚Ì‘‰Á */
+			
+	        if ( noName == SIZE2010 ) {								/* 2010‚É‚È‚¢–¼‘O‚¾‚Á‚½ê‡ */
+	            strcpy( merges[mergeLen].name, mem2009[i].name);	/* –¼‘O‚ğmerges‚É•Û‘¶	*/
+	            strcpy( merges[mergeLen].score, "‘ŞĞ");			/* ‘ŞĞ‚Æmerges‚É•Û‘¶ 	*/
+	            mergeLen++;											/* mergeLen‘‰Á 		*/
+		        j = noName = 0;										/* j‚ÆnoName‚Ì‰Šú‰»	*/
+				i++;												/* 2009‚ÌŸ‚Éi‚Ş		*/
+	        } else {
+				j++;												/* 2010‚ÌŸ‚Éi‚Ş		*/
+	        }
 		}
-		if(getchar()!='\n'){
-			printf("\n“ü—Í‚ªŠÔˆá‚Á‚Ä‚¢‚Ü‚·B\n\n");
-			while((getchar())!='\n');
-			continue;
-		}
-		
-		switch(choice[0]){
-			case '1': new_member = inputs(&t, &pre_member, &next_member, 1);	break;
-			case '2': deleteMember(&pre_member, &next_member);					break;
-			case '3': new_member = updateMember(&pre_member);					break;
-			case '4': findAll(&pre_member);										break;
-			case '5': findMemberById(&pre_member);								break;
-			case '6': end++;													break;
-			default : printf("“ü—Í‚ªŠÔˆá‚Á‚Ä‚¢‚Ü‚·\n\n"); 						break;
-		}
-		if(end){
-			printf("\nyƒvƒƒOƒ‰ƒ€I—¹z\n");
-			break;
-		}	
 	}
-	free(pre_member);
-	free(next_member);
-	if(t!=0 ){
-		free(new_member);
-		free(person);					
+	
+	for (i = 0 ; i < SIZE2010 ; i++) {								/* “üĞ‚Ì”»’è */
+		if (mem2010[i].name[0] == '\0') { 
+	        continue; 
+	    }		
+	    for (j = 0; j < SIZE2009; j++) {							
+			if ( strcmp( mem2010[i].name, mem2009[j].name) != 0) {	/* –¼‘O‚ª•sˆê’v‚µ‚½ê‡ */
+				noName++;
+	        } 
+	    }
+		if ( noName == SIZE2009 ) {									/* –¼‘O‚ª2009‚É‚¢‚È‚¢ê‡ */
+			strcpy( merges[mergeLen].name, mem2010[i].name );		/* –¼‘O‚ğmerges‚É•Û‘¶	*/
+			strcpy( merges[mergeLen].score, "“üĞ" );				/* “üĞ‚Æmerges‚É•Û‘¶ 	*/
+			mergeLen++;												/* mergeLen‘‰Á 		*/
+		}
+		noName = 0;													/* ˆê’v‚µ‚½–¼‘O‚ª‚ ‚Á‚½ê‡AŸ‚ÌŠm”F‚Éi‚Ş */
 	}
+	
+	qsort( merges , mergeLen, sizeof(merge), nameAsc);				/* –¼‘O‚Ì¸‡‚ÌÀs */
+	
+	printf("\n\ny”„‚èã‚°·Šzz\n");
+	for ( i = 0 ; i < mergeLen ; i++ ) {							/* Œ‹‰Êo—Í */
+		printf("%s\t", merges[i].name);
+		printf("%s\n", merges[i].score);
+	}
+	
 	getchar();
-}
-
-
-/**
- * “ü—ÍŠÖ” 
- * @param (*t)	 	 	“Y‚¦”
- * @param (*pre_member)		Å‰‰ïˆõ‚Ìî•ñ
- * @param (*next_member) 	Ÿ‚Ì‰ïˆõ‚Ìî•ñ
- * @param (*caseNum)	 	‰ïˆõ“o˜^or‰ïˆõC³‚Ì‹æØ‚è
- * @return 		 		‰ïˆõî•ñ
-*/
-member *inputs(int *t, member **pre_member, member **next_member,int caseNum){
-	
-
-	char ch ;						/*“ü—Í•¶š*/
-	long i=0;						/*“Y‚¦”*/	
-	int j =0;
-	char *input = (char *)malloc((ADD_SIZE + 1) * sizeof(char));
-	member *new_member =(member *)malloc(sizeof(member));	
-	memset(input, '\0', ADD_SIZE + 1);
-	memset(new_member, '\0',sizeof(member)+1);	
-
+	getchar();
 	
 	
-	printf("\n----------------------------------------------------\n");
-	if(caseNum==1){	
-		printf("\n--------------yyIDu%dv‚Å‰ïˆõ“o˜^zz-------------\n",*t+1);
-	}else{
-		printf("\n--------------yyIDu%dv‚Ìî•ñXVzz-------------\n",*t);	
-	}
-	
-	for( ; j<4 ;j++){
-		
-			
-		switch(j){
-			case 0: printf("\ny–¼‘O‚ğ‘SŠp‚Å“ü—Íz");
-					printf("\n—áF—é–Ø@‚à‚àƒ^ƒƒE\n>>"); break;
-			case 1: printf("\nyZŠ‚ğ‘SŠp‚Å“ü—Íz");
-					printf("\n—áFˆ¤’mŒ§–¼ŒÃ‰®s“Œ‹æ‘ãŠ¯’¬‚R‚T[‚P‚U‚Ì‚QŠK"); 
-					printf("\ni–¢“ü—ÍŠó–]‚Ìê‡AƒGƒ“ƒ^[‰Ÿ‚µj\n>>");break;
-			case 2: printf("\ny¶”NŒ“ú‚ğ”¼Šp‚Å“ü—Íz");
-					printf("\n—áF1900/07/10\n");
-					printf("\ni–¢“ü—ÍŠó–]‚Ìê‡AƒGƒ“ƒ^[‰Ÿ‚µj\n>>");break;
-			case 3: printf("\ny“d˜b”Ô†‚ğ”¼Šp‚Å“ü—Íz"); 
-					printf("\n—áF080-9987-6461\n");
-					printf("\ni–¢“ü—ÍŠó–]‚Ìê‡AƒGƒ“ƒ^[‰Ÿ‚µj\n>>");break;
-			default: printf("end\n%s\n",input); break;
-		}		
-		while(1){
-
-			/*–¢“ü—Í‚Ìê‡*/
-			if( (ch =getchar())=='\n' ){
-				if (i == 0 && j==0) {
-		     			printf("\n–¢“ü—Í‚Å‚·B\n“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢\n>> ");
-						toEmpty(input);				
-		     			continue;		
-				}
-				else {
-					switch(j){
-						case 0:
-							if(fwidthCheck(input,&j)){
-								i=0;
-								toEmpty(input);
-								continue;
-							}else {
-								printf("–¼‘O“ü—ÍF%s\n",input);
-								strcpy( new_member->name ,input);							
-								break;
-							}
-						case 1:
-							if(fwidthCheck(input,&j)){
-								i=0;
-								toEmpty(input);
-								continue;
-							}else {
-								printf("ZŠ“ü—ÍF%s\n",input);
-								strcpy(new_member->address ,input);
-								break;
-							}
-						case 2:
-							if(numberCheck(input,&j)){
-								
-								i=0;
-								toEmpty(input);
-								continue;
-							}else {
-								printf("¶”NŒ“ú“ü—ÍF%s\n",input);
-								strcpy(new_member->birth ,input);
-								break;
-							}
-						case 3:
-							if(numberCheck(input,&j)){
-										
-								i=0;
-								toEmpty(input);
-								continue;
-							}else {
-								printf("“d˜b”Ô†“ü—ÍF%s\n",input);
-								strcpy(new_member->tel ,input);
-								break;
-							}
-						default: break;
-					}
-					toEmpty(input);			/*‹p‰º‚³‚ê‚½“ü—Í•ª‚ğíœ‚·‚éŠÖ”*/
-					i=0;
-					break;
-				}
-			}else{	
-				if(sizeCheck(&i,&j) ){	
-					toEmpty(input);
-					while ( (ch=getchar()) != '\n');	/*“ü—Í‚Å—]‚è‚ª‚ ‚é‚Ì‚Å•K—v*/	
-					i=0;	
-					continue;
-				}
-				input[i++] = ch;
-			}
-		}
-	}
-	if(caseNum==3){
-		new_member->id =*t;			
-	}
-	else{	
-		printf("\n--------------yyIDu%dv‚Ì“o˜^Š®—¹zz-------------\n\n",*t+1);	
-		new_member->id =*t+1;	
-
-		if (  (*pre_member)->id ==0) {
-		    new_member->pre = NULL;
-		    new_member->next = NULL;
-		    *pre_member = new_member;
-		} else if( (*pre_member)->next == NULL ){
-		    new_member->pre = *pre_member;
-		    new_member->next = NULL;
-		    (*pre_member)->next = new_member;
-		} else{
-			new_member->pre = *next_member;			
-			(*next_member)->next = new_member;
-			new_member->pre = *next_member;		
-		}
-		*next_member = new_member;
-		(*t)++;
-	}
-	toEmpty(input);
-	free(input);	
-	return new_member;
-}
-
-
-/**
- * ‰ïˆõíœ‚ÌŠÖ” 
- * @param (*pre_member)		Å‰‰ïˆõ‚Ìî•ñ
- * @param (*next_member) 	Ÿ‚Ì‰ïˆõ‚Ìî•ñ
- * @return 		 		‰ïˆõî•ñíœ‚ÌÀs
-*/
-void deleteMember(member **pre_member, member **next_member){
-	
-	int idCheck;
-	int len;
-	char choice[SIZE]= {0};
-	member *person;
-	
-	while(1){
-		if((*pre_member)->id==0){
-			printf("\n----------------Œ»İ‰ïˆõ‚ª‚¢‚Ü‚¹‚ñ------------------\n\n");
-			break;
-		}
-		printf("-----------------ID‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢---------------\n>>");
-		len=0;
-	
-		while((choice[len]=getchar())!='\n'){
-			len++;					
-		}
-		if(len>SIZE){
-			printf("‰ïˆõID‚Í%dŒ…ˆÈ“à‚Å‚·B“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢B\n\n",SIZE);
-			toEmpty(choice);
-			continue;
-		}
-		
-		idCheck=atoi(choice);
-		
-		person = (*pre_member);
-		len=0;
-		
-		while (person != NULL) {
-		        if(idCheck==person->id){
-					len++;
-					break;
-				}else{
-					person = person->next;
-					continue;
-				}
-		}
-		if(len!=0){
-			printf("\n--------------yyIDu%dv‚ÌíœŠ®—¹zz-------------\n\n",person->id);				
-			if(person->id== (*pre_member)->id){
-				if( (*pre_member)->next ==NULL){							/*‚P‚Â‚Ì‚İ‚ÅPREíœ*/
-					memset((*pre_member), '\0', sizeof(member)+1);
-				}else{														/*2ˆÈã‚ ‚Á‚ÄPREíœ*/
-					(*pre_member) = person->next;
-				}
-			}else if(person->id== (*next_member)->id){						/*ÅŒãíœ*/
-				(*next_member) = person->pre;
-				(*next_member)->next =NULL;
-			}else{															/*^‚ñ’†íœ*/
-				person->pre->next = person->next;
-				person->next->pre = person->pre;	
-			}	
-		}else{
-			printf("\n--------------------“ü—ÍŒ‹‰Ê------------------------\n");
-			printf("‰ïˆõ‚ğ’T‚¹‚Ü‚¹‚ñ‚Å‚µ‚½B\n\n");
-			printf("----------------------------------------------------\n");
-		}					
-		break;
-	}
 }
 
 /**
- * ‰ïˆõC³‚ÌŠÖ” 
- * @param (*pre_member)		Å‰‰ïˆõ‚Ìî•ñ
- * @return 		 		C³‚µ‚½‰ïˆõî•ñ
+ * –¼‘O‚Ì¸‡ŠÖ”(qsort)
+ * @return  	ƒ\[ƒg‚ÌÀs
 */
-member *updateMember(member **pre_member){
-	
-	int idCheck;
-	int len;
-	char choice[SIZE]= {0};
-	member *person;
-	member *new_member =(member *)malloc(sizeof(member));	
-	memset(new_member, '\0',sizeof(member)+1);	
-	
-	while(1){
-		if(  (*pre_member)->id==0){
-			printf("\n----------------Œ»İ‰ïˆõ‚ª‚¢‚Ü‚¹‚ñ------------------\n\n");
-			break;
-		}
-		printf("-----------------ID‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢---------------\n>>");
-		len=0;
-	
-		while((choice[len]=getchar())!='\n'){
-			len++;					
-		}
-		if(len>SIZE){
-				printf("‰ïˆõID‚Í%dŒ…ˆÈ“à‚Å‚·B“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢B\n\n",SIZE);
-				toEmpty(choice);
-				continue;
-			}
-		idCheck=atoi(choice);
-		person = (*pre_member);
-		len=0;
+int nameAsc(const void* first, const void* second) {
+    const merge* a = (const merge*)first;
+    const merge* b = (const merge*)second;
+    return strcmp(a->name, b->name);
+}
 
-		while (person != NULL) {
-	        if(idCheck==person->id){
-				len++;
+
+
+/*
+	for (i = 0 ; i < SIZE2009 ; i++) {
+
+	    for (j = 0 ; j < SIZE2010 ; j++) {
+			if ( strcmp( mem2009[i].name, mem2010[j].name) == 0) {
+				strcpy( merges[symbol].name, mem2009[i].name );
+				sprintf( merges[symbol].score, "%d", mem2010[j].score - mem2009[i].score );
+				symbol++;
 				break;
-			}else{
-				person = person->next;
-				continue;
-			}
-		}
-		if(len!=0){
-			new_member = inputs(&(person->id), NULL, NULL,3);
-			new_member->pre = person->pre;
-			new_member->next = person->next;	
-			*person = *new_member;
-			printf("\n------------yyIDu%dv‚ÌC³Š®—¹zz---------------\n",person->id);	
-				
-			return new_member;
-		}else{
-			printf("\n--------------------“ü—ÍŒ‹‰Ê------------------------\n");			
-			printf("‰ïˆõ‚ğ’T‚¹‚Ü‚¹‚ñ‚Å‚µ‚½B\n\n");
-			printf("----------------------------------------------------\n");	
-			return person;
-		}		
-	}
-	return 0;
-}
-
-/**
- * ‚·‚×‚Ä‚Ì‰ïˆõî•ñ‚Ì•\¦ŠÖ” 
- * @param (*pre_member)		Å‰‰ïˆõ‚Ìî•ñ
- * @return 		 		‚·‚×‚Ä‚Ì‰ïˆõî•ñ‚Ìo—Í
-*/
-void findAll(member **pre_member){
-	
-	member *person;	
-	while(1){
-		if(  (*pre_member)->id==0){
-			printf("\n----------------Œ»İ‰ïˆõ‚ª‚¢‚Ü‚¹‚ñ------------------\n\n");
-			break;
-		}
-		else{
-			person = (*pre_member);
-			printf("\n--------------------‰ïˆõˆê——------------------------\n");			
-			while (person != NULL) {
-			    printf("ID:%d\t", person->id);
-			    printf("–¼‘O:%s\n", person->name);
-			    if (person->next != NULL) {												
-			    	person = person->next;
-					continue;
-			    }else{
-					break;
+	        } else {
+				noName++;
+				if ( noName == SIZE2010 ) {
+					strcpy( merges[symbol].name, mem2009[i].name );
+					strcpy( merges[symbol].score, "÷ÜŞä" );
+					symbol++;
 				}
 			}
-			printf("----------------------------------------------------\n");
-			break;
-		}
+	    }
+		noName = 0;
 	}
-}
 
-/**
- * w’èID‚Ì‰ïˆõî•ñ‚Ì•\¦ŠÖ” 
- * @param (*pre_member)		Å‰‰ïˆõ‚Ìî•ñ
- * @return 		 		w’èID‚Ì‰ïˆõî•ñ‚Ìo—Í
 */
-void findMemberById(member **pre_member){
-	
-	member *person;	
-	int idCheck;
-	int len;
-	char choice[SIZE]= {0};
-	
-	while(1){	
-		if( (*pre_member)->id==0){
-			printf("\n----------------Œ»İ‰ïˆõ‚ª‚¢‚Ü‚¹‚ñ------------------\n\n");
-			break;
-		}	
-		else{
-		printf("-----------------ID‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢---------------\n>>");
-			len=0;
-			
-			while((choice[len]=getchar())!='\n'){
-				len++;					
-			}
-			if(len>SIZE){
-					printf("‰ïˆõID‚Í%dŒ…ˆÈ“à‚Å‚·B“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢B\n\n",SIZE);
-					toEmpty(choice);
-					continue;
-			}
-			
-			idCheck=atoi(choice);
-			
-			person = (*pre_member);
-			len=0;
-			printf("\n--------------------‰ïˆõî•ñ------------------------\n");
-			while (person != NULL) {
-		        if(idCheck==person->id){
-					len++;
-					break;
-				}else{
-					person = person->next;
-					continue;
-				}
-			}
-			if(len!=0){
-				printf("ID:%d\n", person->id);
-				printf("–¼‘O:%s\n", person->name);
-				printf("ZŠ:%s\n", person->address);
-				printf("¶”NŒ“ú:%s\n", person->birth);						
-				printf("“d˜b”Ô†:%s\n", person->tel);							
-			}else{
-				printf("‰ïˆõ‚ğ’T‚¹‚Ü‚¹‚ñ‚Å‚µ‚½B\n\n");
-			}		
-			
-			printf("----------------------------------------------------\n");			
-			break;
-		}
-	}
-}
-
-/**
- * ‘SŠp•¶š‚ÌŒŸ’èŠÖ”
- * @param (*input) “ü—Í•ª‚ğ•ÛŠÇ‚µ‚Ä‚¢‚é”z—ñ
- * @param (*j)	 “Y‚¦”i–¼‘O‚ÆZŠj
- * @return 1 	 ‘SŠp‚Ì•¶š‚Å‚Í‚È‚©‚Á‚½ê‡AƒGƒ‰[”­¶
- * @return 2 	 ”š“ü—Í‚Ìê‡AƒGƒ‰[”­¶
- * @return 3 	 ‹L†“ü—Í‚Ìê‡AƒGƒ‰[”­¶
- * @return 4 	 ƒXƒy[ƒX‚Ån‚Ü‚é“ü—Í‚Ìê‡AƒGƒ‰[”­¶
- * @return 0 	 “ü—Í‚É–â‘è‚È‚­AŸ‚Éi‚Ş
-*/
-int fwidthCheck(char *input,int *j){
-		
-	int l;
-	int k = strlen(input);
-	wchar_t *wc;
-	wchar_t exceptName[] =  L"[`Oƒ„{b”•";
-	wchar_t exceptAddress[] =  L"`Oƒ„{b”•";
-	int symbol; 
-	int space;
-	int p;
-	wc = (wchar_t *)malloc((k + 1) * sizeof(wchar_t));
-	
-	if (wc == NULL) {
-        printf("error\n");
-        return -1;  
-   	}
-	if(k==0){
-		return 0;
-	}	
-	memset(wc, '\0', k + 1);	
-	mbstowcs(wc,input,k);
-	p=wcslen(wc);
-	
-	if( !iswspace(input[0]) && (k==1 || k%2==1) ){
-		printf("\n”¼Šp‚Í“ü—Í‚Å‚«‚Ü‚¹‚ñB\n“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢\n>>");
-		free(wc);
-		return 1;
-	}
-	
-	for (l=0 ; l< p ; l++) {
-		
-		symbol = 0;
-		space=0;
-		
-		if( l==0 && wc[l]==L'@'){
-			space++;
-		}
-		
-		if(*j==0){
-		      if (wcschr(exceptName, wc[l]) != NULL) {
-		      	symbol++;
-			}
-	  	}else{
-			if (wcschr(exceptAddress, wc[l]) != NULL) {
-	        	symbol++;
-			}
-		}
-		
-		if( iswdigit(wc[l]) && *j==0 ){
-			printf("\n”š‚Í“ü—Í‚Å‚«‚Ü‚¹‚ñB\n“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢\n>>");
-			free(wc);
-			return 2;
-		}else if( space!=0 || iswspace(input[l]) ){
-			printf("\n1Œ…–Ú‚ÍƒXƒy[ƒX‚ª“ü—Í‚Å‚«‚Ü‚¹‚ñB\n“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢\n>>");
-			free(wc);
-			return 4;
-		}else if(  iswpunct(wc[l]) || symbol!=0 ){
-			
-			if( (wc[l]==L'[' && *j==1) || iswdigit(wc[l-1])){
-				continue;
-			}else{
-				printf("\n‹L†‚Í“ü—Í‚Å‚«‚Ü‚¹‚ñB\n“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢\n>>");
-				free(wc);
-				return 3;
-			}
-		}else if( wc[l] < 0x100  ){
-			printf("\n‘SŠp‚Ì‚İ“ü—Í‚Å‚«‚Ü‚·B\n“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢\n>>");
-			free(wc);
-			return 1;
-		}
-		else {
-			continue;
-		}	
-	}	
-	wcstombs(input, wc, k);
-	free(wc);
-	return 0;
-}
-
-
-/**
- * ”¼Šp•¶š‚ÌŒŸ’èŠÖ”
- * @param (*input) “ü—Í•ª‚ğ•ÛŠÇ‚µ‚Ä‚¢‚é”z—ñ
- * @param (*j)	 “Y‚¦”i¶”NŒ“ú‚Æ“d˜b”Ô†j
- * @return 1 	 ”¼Šp‚â‹L†‚Ì“ü—Í‚ªŠÔˆá‚Á‚Ä‚¢‚éê‡AƒGƒ‰[”­¶
- * @return 2 	 '/'‚Ì“ü—Í‚ªŠÔˆá‚Á‚Ä‚¢‚éê‡AƒGƒ‰[”­¶
- * @return 3 	 '-'‚Ì“ü—Í‚ªŠÔˆá‚Á‚Ä‚¢‚éê‡AƒGƒ‰[”­¶
- * @return 4 	 ¶”NŒ“ú‚Í•K‚¸10Œ…‚Å“ü—ÍA‚Å‚È‚¢‚ÆƒGƒ‰[”­¶
- * @return 0 	 “ü—Í‚É–â‘è‚È‚­AŸ‚Éi‚Ş
-*/
-int numberCheck(char *input,int *j){
-	
-	int slashCount=0;
-	int barCount=0;
-	int k;
-	int len=strlen(input);
-	
-	if(len==0)return 0;
-	
-	if(*j==2 && len!=BIRTH_SIZE-1){
-		printf("\n%dŒ…‚Ì”¼Šp‚Å³‚µ‚­“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B\n>>",BIRTH_SIZE-1);
-		return 2;
-	}
-	else{
-		for(k=0; k< len ; k++){
-			if( !isdigit(input[k]) ){
-				if(*j==2 && input[k] =='/'){
-					slashCount++;
-					continue;
-				}
-				else if(*j==3 && input[k]=='-'){
-					barCount++;
-					continue;
-				}
-				else{
-					printf("\n”¼Šp‚â‹L†‚Ì“ü—Í‚ªŠÔˆá‚Á‚Ä‚¢‚Ü‚·B\n“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢\n>>");
-					/*free(input);*/
-					return 1;
-				}
-			}
-		}
-		if(*j==2 && (slashCount!=2 || input[4] !='/' || input[7]!='/') ){		/* '/'‚ª2‚Â‚¶‚á‚È‚©‚Á‚½ê‡A“ü—Í‚µ’¼‚·‚æ‚¤‚É‚·‚é‚½‚ß*/
-			printf("\n'/'‚Ì“ü—Í‚ªŠÔˆá‚Á‚Ä‚¢‚Ü‚·B\n“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢\n>>");
-			return 2;
-		}
-		else if(*j==3 && (barCount!=2 || (strstr(input, "--") != NULL) 
-				|| input[0]=='-' || input[len-1]=='-' ) ){						/* '|'‚ª2‚Â‚¶‚á‚È‚©‚Á‚½ê‡A“ü—Í‚µ’¼‚·‚æ‚¤‚É‚·‚é‚½‚ß*/
-			printf("\n'-'‚Ì“ü—Í‚ªŠÔˆá‚Á‚Ä‚¢‚Ü‚·B\n“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢\n>>");
-			return 3;
-		}
-	}
-	return 0;
-}
-
-
-/**
- * •¶š—ñ‚Ì’·‚³§ŒÀƒ`ƒFƒbƒNŠÖ”
- * @param (*i) 	“Y‚¦”
- * @param (*j)	“Y‚¦”
- * @return 1 	•¶š—ñ”‚ğ’´‚¦AƒGƒ‰[”­¶
- * @return 0 	 “ü—Í‚É–â‘è‚È‚­AŸ‚Éi‚Ş 
-*/
-int sizeCheck(long *i,int *j){
-	
-    int maxSize;	
-	switch(*j){
-		case 0: maxSize = NAME_SIZE; break;
-		case 1: maxSize = ADD_SIZE;  break;
-		case 2: maxSize = BIRTH_SIZE;break;
-		case 3: maxSize = TEL_SIZE;  break;
-		default: return 0;
-	}
-	if(*i >maxSize-2 ){
-		if(*j==2||*j==3){
-			printf("\n•¶š‚ğ%dŒ…‚É§ŒÀ‚µ‚Ä‚Ü‚·B\n“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢\n>>",maxSize-1);	
-		}
-		else {
-			printf("\n•¶š‚ğ%dŒ…‚É§ŒÀ‚µ‚Ä‚Ü‚·B\n“ü—Í‚µ’¼‚µ‚Ä‚­‚¾‚³‚¢\n>>",maxSize/2);
-		}		
-		return 1;
-	}
-	return 0;
-}
-
-/** 
- * ‹p‰º‚³‚ê‚½“ü—Í•ª‚ğíœ‚·‚éŠÖ”
- *iƒI[ƒo[ƒtƒ[–h~j
- * @param (*input) “ü—Í•ª‚ğ•ÛŠÇ‚µ‚Ä‚¢‚é”z—ñ
- * @return (*input)”z—ñ‚Ì‰Šú‰»
-*/
-void toEmpty(char *input){
-	int j = 0;		/*“Y‚¦”*/
-	while (input[j] != '\0') {
-	  input[j] = '\0';
-	  j++;
-	}
-}
