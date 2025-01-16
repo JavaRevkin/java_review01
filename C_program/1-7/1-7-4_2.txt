@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+//2進数で変換するためのメソッド
+void print_binary(char str[]) {
+    int num = atoi(str);//int型で変換します。
+    for (int i = 31; i >= 0; i--) {
+        printf("%d", (num >> i) & 1);
+        if (i % 4 == 0) printf(" ");
+    }
+    printf("\n");
+}
+
+int main() {
+    int maxLen = 6;
+    char str[6];
+    int num;
+
+    while (1)
+    {
+        printf("半角数字を入力してください: ");
+        int c, i = 0;
+        // 未入力じゃない時1文字ずつ読み取り
+        while ((c = getchar()) != '\n' && i < maxLen -1)
+        {
+            // 文字列に追加
+            str[i++] = c;
+        }
+        // 文字列の終端にヌル終端文字を追加
+        str[i] = '\0';
+
+        //未入力する時もう一度入力します。
+        if (i == 0 || i >= maxLen - 1)
+        {
+            printf("未入力エラー：半角数字を入力してください(5桁数まで)\n");
+			while (getchar() != '\n'); // 入力バッファをクリア
+        }
+        
+        else
+        {
+            //isdigitを使って１ずつ数字を確認します。
+            if (!isdigit(str[0]))
+            {
+                printf("エラー:半角数字を入力してください");
+                while (getchar() != '\n'); // 入力バッファをクリア
+
+            }
+            else
+            {
+                break;
+            }
+        }
+
+    }
+    print_binary(str);//問題がなかったらstrをprint_binaryに入れます。
+
+
+    return 0;
+
+}

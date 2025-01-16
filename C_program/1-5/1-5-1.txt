@@ -1,0 +1,38 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#define false 0
+#define true 1
+
+int main() {
+    char str[100], largeStr[100];
+    int i;
+
+	//1~10まで繰り返し
+    for (i = 0; i < 10; i++) {
+        printf("文字を入力してください (%d/10): ", i + 1);
+
+        // 文字列を入力
+        if (scanf("%99[^\n]", str) == true) {
+            //文字列を比較します。->strの文字が大きかったらstrcpyに行きます。
+            if (strcmp(str, largeStr) > 0) {
+                //strの文字列をlargeStrでコピーします。
+                strcpy(largeStr, str);
+            }
+        }
+        else {
+            // 入力が空の場合
+            printf("エラー: 文字が入力されていません。もう一度入力してください。\n");
+           
+            i--; // 回数を調整して再入力
+        }
+
+        // バッファのクリア
+        while (getchar() != '\n');
+    }
+
+    // 最も大きな文字列を表示
+    printf("\n最も大きな文字列は: %s\n", largeStr);
+
+    return 0;
+}

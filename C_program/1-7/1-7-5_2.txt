@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+//int getline(int maxLen);
+
+int main(void) {
+
+    int maxLen = 9;//桁数設定
+    printf("数字を入力してください（7桁数まで）\n");
+    char inputStr[10];//10まで格納
+    int max = 0;//大きい数字を保存
+
+    //10回繰り返し
+    for (int i = 0; i < 10; i++) {
+        //無限ループ
+        while (1) {
+            int j = 0;
+            int c;
+            printf("%d回目: ", i + 1);
+            //未入力じゃない時
+            while ((c = getchar()) != '\n' && j < maxLen - 1)
+            {
+                //問題がない時配列に格納
+                inputStr[j++] = c;
+            }
+            // 文字列の終端にnull終端文字を追加
+            inputStr[j] = '\0';
+
+            // 未入力と桁数が８桁数以上時もう一度入力します。
+            if (j == 0) {
+                printf("エラー：半角数字を入力してください（7桁数まで）。\n");
+            }
+            else if (j >= maxLen - 1) {
+                printf("エラー：半角数字を入力してください（7桁数まで）。\n");
+                    while (getchar() != '\n'); // 入力バッファをクリア
+            }
+
+            else {
+                
+                int count = 0;
+                for (int k = 0; k < strlen(inputStr); k++)
+                {
+                    //1文字ずつ数字をチェック
+                    if (isdigit(inputStr[k]))
+                    {
+                    	//countとStr[i]の数学と同じ場合trueー＞count++
+                        count++;
+                    }
+                }
+                if (count == strlen(inputStr)) {
+                    //奇数の中で大きな奇数をmaxに入れます
+                    int num = atoi(inputStr);
+                    if (num % 2 != 0) {
+                        if (max < num) {
+                            max = num;
+                        }
+                    }
+                    break;
+                }
+                else
+                {
+                    printf("エラー：半角数字を入力してください。\n");
+
+
+                }
+            }
+        }
+    }
+    printf(">Enter押す\n");
+    while (getchar() != '\n'); // 入力バッファをクリア
+
+    //結果出力
+    if (max == 0)
+    {
+        printf("奇数の入力がありませんでした\n");
+    }
+    else
+    {
+        printf("一番大きい奇数は:%d\n", max);
+    }
+    return 0;
+}

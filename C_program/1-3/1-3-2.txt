@@ -1,0 +1,9 @@
+#include<stdio.h>
+
+int main() {
+
+	//for文1~10まで繰り返す
+	for (int i = 1; i <= 10; i++) {
+		printf("%d,", i);
+	}
+}

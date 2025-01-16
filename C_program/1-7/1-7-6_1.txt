@@ -1,0 +1,131 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+
+#define maxLen 6//配列の長さ設定
+
+void getnum(char* num);
+int main(void)
+{
+    char Strnum1[maxLen];
+    char Strnum2[maxLen];
+
+    //getlineのメソッドにStrnum1,Strnum2を入れます。
+    getnum(Strnum1);
+    getnum(Strnum2);
+
+    //文字を数字で変換
+    int int1 = atoi(Strnum1);
+    int int2 = atoi(Strnum2);
+    //計算結果出力
+    printf("-------- int型の場合 --------\n");
+
+    printf("足し算：%d + %d = %d\n", int1, int2, (int1 + int2));
+    printf("引き算：%d - %d = %d\n", int1, int2, (int1 - int2));
+    printf("掛け算：%d × %d = %d\n", int1, int2, (int1 * int2));
+    if (int2 != 0)
+    {
+        printf("割り算：%d ÷ %d = %d\n", int1, int2, (int1 / int2));
+    }
+    else
+    {
+        printf("割り算：0で割ることはできません\n");
+    }
+    printf("論理和：%d\n", int1 || int2);
+    printf("論理積：%d\n", int1 & int2);
+
+    float float1 = (float)atof(Strnum1);
+    float float2 = (float)atof(Strnum2);
+    printf("-------- float型の場合 --------\n");
+    printf("足し算：%f + %f = %f\n", float1, float2, (float1 + float2));
+    printf("引き算：%f - %f = %f\n", float1, float2, (float1 - float2));
+    printf("掛け算：%f × %f = %f\n", float1, float2, (float1 * float2));
+    if (int2 != 0)
+    {
+        printf("割り算：%f ÷ %f = %f\n", float1, float2, (float1 / float2));
+    }
+    else
+    {
+        printf("割り算：0で割ることはできません\n");
+    }
+    printf("論理和：%d\n", float1 || float2);
+    printf("論理積：%d\n", float1 && float2);
+
+    double double1 = atof(Strnum1);
+    double double2 = atof(Strnum2);
+    printf("-------- double型の場合 --------\n");
+    printf("足し算：%lf + %lf = %lf\n", double1, double2, (double1 + double2));
+    printf("引き算：%lf - %lf = %lf\n", double1, double2, (double1 - double2));
+    printf("掛け算：%lf × %lf = %lf\n", double1, double2, (double1 * double2));
+    if (int2 != 0)
+    {
+        printf("割り算：%lf ÷ %lf = %lf\n", double1, double2, (double1 / double2));
+    }
+    else
+    {
+        printf("割り算：0で割ることはできません\n");
+    }
+    printf("論理和：%d\n", double1 || double2);
+    printf("論理積：%d\n", double1 && double2);
+
+    return 0;
+}
+
+
+void getnum(char* num)
+{
+    printf("2つの数字入力してください(5桁数まで)。\n");
+    while (1)
+    {
+        int j = 0;
+        int c;
+
+        // 1文字ずつ読み取り
+        printf("数字を入力：");
+        while ((c = getchar()) != '\n' && j < maxLen)
+        {
+            //問題がない時配列に格納
+            num[j++] = c;
+        }
+        // 配列の終端にnullを追加
+        num[j] = '\0';
+        // 未入力と桁数が6桁数以上時もう一度入力します。
+        if (j == 0)
+        {
+            printf("半角数字を入力してください(5桁数まで)。\n");
+        }
+        else if (j == maxLen)
+        {
+            printf("桁数が多いです(5桁数まで)\n");
+            while (getchar() != '\n'); // 入力バッファをクリア
+        }
+
+        else
+        {
+            int count = 0;
+
+            for (int k = 0; k < strlen(num); k++)
+            {
+                // 1文字ずつ数字チェック
+                if (isdigit(num[k]))
+                {
+                    //num[k]が数字だったらcountが増えます。
+                    count++;
+                }
+
+            }
+            //全部数字の場合は終了
+            if (count == strlen(num)){
+                break;
+            }
+			//数字じゃない場合
+            else
+            {
+                printf("半角数字を入力してください。\n");
+                while (getchar() != '\n'); // 入力バッファをクリア
+            }
+        }
+    }
+}

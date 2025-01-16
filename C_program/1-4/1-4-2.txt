@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define true 1
+#define false 0
+void printBinary(int n) {
+    // ビット演算子を使って2進数の表示
+    for (int i = 31; i >= 0; i--) {
+        printf("%d", (n >> i) & 1);
+        if (i % 4 == 0) printf(" "); 
+    }
+    printf("\n");
+}
+
+int main() {
+    int num;
+    char str[100];
+    while (1) {
+        printf("半角数字を入力してください: ");
+
+        //文字で入力します。
+        if (scanf("%99[^\n]", str) == 1) {
+           //入力された文字を数字で変換します。
+            num = atoi(str);
+            //trueだったら2進数で変換します。
+            if (num) {
+                // 入力が正しい場合、2進数で表示
+                printf("入力された数字 %d の2進数表現: ", num);
+                printBinary(num);
+                break; // 入力が成功した場合ループを抜ける
+            }
+        }
+        else {
+            // 入力が正しくない場合（未入力や数字じゃない場合）
+            printf("エラー: 半角数字が入力されていません。もう一度入力してください。\n");
+
+            // 入力バッファのクリア
+            while (getchar() != '\n'); // 改行まで入力を消費
+        }
+    }
+
+    return 0;
+}

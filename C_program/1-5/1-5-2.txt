@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>//isdigitを使うするために宣言しました。
+
+int main(void)
+{
+
+    char Str[10][8];//7桁数までできるように
+    int numStr[10];
+
+    printf("数字を10回入力してください(7桁数まで)\n");
+    for (int i = 0; i < 10; i++) {
+        printf("%d回目の入力: ", i + 1);
+        while (1) {
+
+            //未入力処理
+            if (scanf("%99[^\n]", Str[i]) != 1 || strlen(Str[i]) == 0) {
+                printf("エラー:数字を入力してください。\n");
+                printf("%d回目の入力: ", i + 1);
+
+                while (getchar() != '\n'); // 入力バッファをクリア
+            }
+            else {
+                int  count = 0;
+                for (int j = 0; j < strlen(Str[i]); j++) {
+                    //isdigit: 数字1ずつ判別,数字だったらcountの数字が増えます。
+                    if (isdigit(Str[i][j])) {
+                        count++;
+                    }
+                }
+                //countとStr[i]の数学と同じ場合true
+                if (count == strlen(Str[i])) {
+
+                    // 問題がなかったら数字で変換  
+                    int num = atoi(Str[i]);
+
+                    numStr[i] = num;
+                    break;
+                }
+                else {
+                    printf("エラー: 半角数値を入力してください。\n");
+                    printf("%d回目の入力: ", i + 1);
+                    while (getchar() != '\n'); // 入力バッファをクリア
+
+                }
+            }
+        }
+        scanf("%*c");//bufferにある\nを無視します。
+    }
+
+    int max = 0;//大きい数字を保存
+    for (int i = 0; i < 10; i++)
+    {
+        //奇数の中で大きな奇数をmaxに入れます
+        if (numStr[i] % 2 != 0)
+        {
+            if (max < numStr[i])
+            {
+                max = numStr[i];
+            }
+        }
+    }
+
+    if (max == 0) {//奇数がなかった場合
+        printf("奇数の入力がありませんでした\n");
+    }
+    else
+    {
+        printf("一番大きい奇数: %d\n", max);
+    }
+
+    return 0;
+}

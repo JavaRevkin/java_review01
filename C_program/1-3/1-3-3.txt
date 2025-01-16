@@ -1,0 +1,15 @@
+#include<stdio.h>
+
+int main() {
+
+	//1から１０まで繰り返し前置インクリメント
+	for (int j = 1; j <= 10;) {
+		printf("%d ", j++);
+	}
+	printf("\n");
+	
+	//1から１０まで繰り返し後置インクリメント
+	for (int k = 1; k <= 10;) {
+		printf("%d ", ++k);
+	}
+}

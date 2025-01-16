@@ -1,0 +1,73 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+
+#define STR_LEN 20
+
+int main() {
+    char base[STR_LEN + 1];  // 基準文字列を格納
+    char input[STR_LEN + 1]; // 入力文字列を格納
+    int match = 0;         // 一致した回数をカウント
+     // 基準文字列の入力
+	while (1) {
+        printf("基準文字列を入力してください(20文字まで): ");
+        //未入力の場合
+		if (scanf("%99[^\n]", base) != 1 || strlen(base) == 0) {
+            printf("エラー: 基準文字列が空です。\n");
+            while (getchar() != '\n'); // 入力バッファをクリア
+        }
+		//21文字以上入力する場合
+        else if (strlen(base) > STR_LEN) {
+            printf("エラー20文字まで入力してください。 \n");
+            continue;
+        }
+		//問題がない時
+        else {
+
+            printf("終了するときは[end]を入力してください。\n");
+            while (getchar() != '\n');
+            break;
+        }
+    }
+    
+	//文字列入力
+    while (1) {
+        printf("文字列を入力してください: ");
+        //未入力の場合
+		if (scanf("%99[^\n]", input) != 1 || strlen(input) == 0) {
+            printf("エラー: 入力が空です。再入力してください。\n");
+            while (getchar() != '\n'); // 入力バッファをクリア
+            
+        }
+			//21文字以上入力する場合
+        else if (strlen(input) > STR_LEN) {
+            printf("エラー20文字まで入力してください。 \n");
+            
+            
+        }
+		//問題がない時
+        else {
+
+            // 終了条件
+            if (strcmp(input, "end") == 0) {
+                printf("プログラムを終了します。\n");
+                break;
+            }
+
+            // 文字列の比較
+            if (strlen(input) == strlen(base) && strcmp(input, base) == 0) {
+                match++;
+                printf("一致しました！一致回数: %d\n", match);
+                
+            }
+			//基準文字と入力文字と異なる場合
+            else {
+                printf("エラー: 基準文字列と一致しません。\n");
+            }
+        }
+        while (getchar() != '\n'); // 入力バッファをクリア
+    }
+
+    return 0;
+}
+

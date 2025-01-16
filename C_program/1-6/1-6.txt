@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <limits.h>
+#include <float.h>
+#include <string.h> 
+int main() {
+    char Firstinput[100], Secondinput[100];
+    int Firstint, Secondint;//int型
+    float Firstfloat, Secondfloat;//float型
+    double Firstdouble, SeconddoubleB;//double型
+
+    printf("2つの数値を入力してください\n");
+
+    // 入力1の取得
+    while (1) {
+        printf("1つ目の数字: ");
+
+        if (scanf("%99[^\n]s", Firstinput) == 1) {
+            //桁数確認
+			if (strlen(Firstinput) > 5) {
+                printf("入力桁数は５桁数以下です。");
+            }
+            else {
+                //各自の変数のタープについて値が入れました。
+                if (sscanf(Firstinput, "%d", &Firstint) == 1 &&
+                    sscanf(Firstinput, "%f", &Firstfloat) == 1 &&
+                    sscanf(Firstinput, "%lf", &Firstdouble) == 1) {
+                    while (getchar() != '\n'); // 入力バッファをクリア
+                    break; // 入力成功したら終わり。
+                }
+            }
+        }
+        printf("エラー: 半角数値を入力してください。\n");
+        while (getchar() != '\n'); // 入力バッファをクリア
+    }
+
+    // 入力2の取得
+    while (1) {
+        printf("2つ目の数値: ");
+        if (scanf("%99[^\n]s", Secondinput) == 1) {
+            if (strlen(Secondinput) > 5) {
+                printf("入力桁数は５桁数以下です。");
+            }
+            else {
+                if (sscanf(Secondinput, "%d", &Secondint) == 1 &&
+                    sscanf(Secondinput, "%f", &Secondfloat) == 1 &&
+                    sscanf(Secondinput, "%lf", &SeconddoubleB) == 1) {
+                    break; // 入力成功したら終わり。
+                }
+            }
+        }
+        printf("エラー: 半角数値を入力してください。\n");
+        while (getchar() != '\n'); // 入力バッファをクリア
+    }
+
+    printf("\n--- 演算結果 ---\n");
+
+    // 四則演算
+    printf("四則演算:\n");
+    printf("int型\n");
+    printf("足し算=%d + %d = %d\n", Firstint,Secondint,(Firstint + Secondint));
+    printf("引き算= %d - %d = %d\n", Firstint, Secondint, (Firstint - Secondint));
+    printf("掛け算 =%d * %d =%d\n", Firstint, Secondint, (Firstint * Secondint));
+    printf("割り算 =%d / %d =%d\n\n", Firstint, Secondint,Secondint != 0 ? Firstint / Secondint : 0);
+
+    printf("float型\n");
+    printf("足し算= %.2f + %.2f = %.2f\n",Firstfloat,Secondfloat,(Firstfloat + Secondfloat));
+    printf("引き算= %.2f - %.2f = %.2f\n",Firstfloat,Secondfloat, (Firstfloat - Secondfloat));
+    printf("掛け算= %.2f * %.2f = %.2f\n", Firstfloat,Secondfloat, (Firstfloat * Secondfloat));
+    printf("割り算= %.2f / %.2f = %.2f\n\n", Firstfloat,Secondfloat, Secondfloat != 0 ? Firstfloat / Secondfloat : 0);
+   
+    printf("double型\n");
+    printf("足し算= %.2lf + %.2lf = %.2lf\n",Firstdouble,SeconddoubleB,(Firstdouble + SeconddoubleB));
+    printf("引き算= %.2lf - %.2lf = %.2lf\n",Firstdouble,SeconddoubleB,(Firstdouble - SeconddoubleB));
+    printf("掛け算= %.2lf * %.2lf = %.2lf\n", Firstdouble,SeconddoubleB,(Firstdouble * SeconddoubleB));
+    printf("割り算= %.2lf / %.2lf = %.2lf\n", Firstdouble, SeconddoubleB, SeconddoubleB != 0 ? Firstdouble / SeconddoubleB : 0);
+
+    // 論理和 (OR) と 論理積 (AND)
+    printf("\n論理演算\n");
+    printf("int型:論理和=%d 論理積=%d\n", Firstint || Secondint, Firstint & Secondint);
+    printf("double型:論理和=%d 論理積=%d\n", Firstdouble || SeconddoubleB, Firstdouble && SeconddoubleB);
+    printf("float型:論理和=%d 論理積=%d\n", Firstfloat || Secondfloat, Firstfloat && Secondfloat);
+
+
+    return 0;
+}

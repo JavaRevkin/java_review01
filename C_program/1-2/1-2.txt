@@ -1,0 +1,18 @@
+#include <stdio.h>
+ 
+int main(void)
+{
+	//int型numを宣言して数字1997を入れました。
+    int num= 1997;
+	
+	//文字列を入れるためにchar型の配列chを宣言しました。
+	char ch[10] = "HELLO C"; 
+	
+    //整数型numを出力するために%dを使って出力します。
+	printf("%d\n", num);
+	
+	//文字列を出力するために%sを使って出力します。」
+	 printf("%s\n", ch);
+     
+    return 0;
+}

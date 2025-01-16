@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char str[100]; // 文字列を格納する配列
+
+    while (1) {
+        printf("文字列を入力してください: ");
+
+        // 入力を取得
+        if (scanf("%99[^\n]", str) == 1) { 
+           
+            printf("入力された文字列: %s\n", str);
+            break; // 入力が成功した場合ループを抜ける
+        }
+        else {
+            // 未入力の場合
+            printf("エラー: 文字列が入力されていません。もう一度入力してください。\n");
+
+            // 入力バッファのクリア
+            while (getchar() != '\n'); // 改行まで入力を消費
+        }
+    }
+
+    return 0;
+}

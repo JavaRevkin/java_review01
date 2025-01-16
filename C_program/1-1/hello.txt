@@ -1,0 +1,8 @@
+#include <stdio.h>
+
+int main(){
+	//prinf:出力するために使います。
+	printf("Hello C\n");
+	
+	return 0;
+}

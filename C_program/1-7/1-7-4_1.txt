@@ -1,0 +1,40 @@
+#include <stdio.h>
+
+int main() {
+    char str[100];  
+    int i = 0;      // 配列のインデックス
+
+    while (1) {
+        printf("文字列を入力してください: ");
+
+       
+        while (1) {
+            char ch = getchar(); 
+
+            //未入力の場合はエラー
+            if (ch == '\n') {
+                if (i == 0) {
+                    printf("エラー: 文字列を入力してください。\n");
+                    break; 
+                }
+                break; 
+            }
+
+            // 入力された文字を配列strに格納
+            str[i] = ch;
+            i++;//増えます。
+        }
+
+        // 入力された文字列を表示
+        str[i] = '\0'; // 文字列の終端を追加
+        if (i > 0) {
+            printf("入力された文字列: %s\n", str);
+            break;  
+        }
+        else {
+            i = 0;  // エラーがあった場合、配列をリセット
+        }
+    }
+
+    return 0;
+}

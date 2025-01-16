@@ -1,0 +1,15 @@
+#include<stdio.h>
+
+int main() {
+
+	char ch[] = "Hello C";
+
+	//whileを使ってHello Cの長さまで繰り返す
+	int i = 0;
+	while (i < sizeof(ch)){
+		printf("%c\n", ch[i]);
+		i++;
+	}
+	return 0;
+	
+}

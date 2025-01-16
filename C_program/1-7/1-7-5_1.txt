@@ -1,0 +1,59 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_STR_LEN 20
+//#define NUM_STRINGS 10
+
+int main() {
+    char strings[10][MAX_STR_LEN + 1]; // 文字列を格納する配列
+    char temp[MAX_STR_LEN + 2]; // 入力バッファ (+2 は改行文字と終端文字のため)
+    int i;
+
+    printf("文字列を 10 回入力してください（最大 20 文字まで）。\n");
+
+    for (i = 0; i < 10; i++) {
+        while (1) {
+            printf("%d 回目の文字列を入力してください: ", i + 1);
+
+            int index = 0;
+            char ch;
+
+            // getcharで入力
+            while (1) {
+                ch = getchar();
+                if (ch == '\n') { // 改行文字で終了
+                    break;
+                }
+                if (index < MAX_STR_LEN + 1) { // バッファが溢れないように格納
+                    temp[index++] = ch;
+                }
+            }
+            temp[index] = '\0'; // 終端文字を追加
+
+            // 入力をチェック
+            if (strlen(temp) == 0 || ch == ' ' || ch == '\t') { // 未入力の場合
+                printf("エラー: 入力が空です。再入力してください。\n");
+                continue;
+            }
+            if (strlen(temp) > MAX_STR_LEN) { // 入力が20文字を超えた場合
+                printf("エラー: 文字数が多すぎます（最大 %d 文字）。再入力してください。\n", MAX_STR_LEN);
+                continue;
+            }
+
+            strcpy(strings[i], temp); // 有効な入力を配列に格納
+            break; // 次の入力に進む
+        }
+    }
+
+    // 最も大きな文字列を探す
+    char* largest = strings[0];
+    for (int j = 1; j < 10; j++) {
+        if (strcmp(strings[j], largest) > 0) { // 文字列を比較
+            largest = strings[j];
+        }
+    }
+
+    printf("最も大きな文字列は: %s\n", largest);
+    return 0;
+}
