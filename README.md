@@ -1,0 +1,2 @@
+# java_review01
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0c372846a42a495cba5eb98b41d895b5)](https://app.codacy.com/gh/JavaRevkin/java_review01?utm_source=github.com&utm_medium=referral&utm_content=JavaRevkin/java_review01&utm_campaign=Badge_Grade)
